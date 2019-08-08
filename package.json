@@ -1,0 +1,37 @@
+{
+  "name": "antd-prompt",
+  "version": "0.1.0",
+  "description": "An ant.design helper that auto create a Modal with an optional message prompting the user to input some text.",
+  "main": "lib/index.js",
+  "module": "esm/index.js",
+  "scripts": {
+    "build": "rm -rf esm && rm -rf lib && npm run build:esm && npm run build:commonjs",
+    "build:commonjs": "cross-env BABEL_OUTPUT=commonjs babel src --out-dir lib/ --ignore **/__tests__,**/__mocks__",
+    "build:esm": "babel src --out-dir esm/ --ignore **/__tests__,**/__mocks__",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wangsijie/antd-prompt.git"
+  },
+  "keywords": [
+    "antd",
+    "ant-design",
+    "prompt",
+    "modal"
+  ],
+  "author": "Wang Sijie (i@sijie.wang)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wangsijie/antd-prompt/issues"
+  },
+  "homepage": "https://github.com/wangsijie/antd-prompt#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-react": "^7.0.0",
+    "cross-env": "^5.2.0"
+  }
+}
