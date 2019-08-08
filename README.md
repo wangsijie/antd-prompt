@@ -10,7 +10,7 @@ npm i antd-prompt
 
 ## Usage
 
-[![Edit antd-prompt](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/fragrant-sky-fohcs?fontsize=14)
+[![Edit antd-prompt](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/antd-prompt-fohcs?fontsize=14)
 
 ```js
 import React, { component } from 'react';
