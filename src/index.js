@@ -8,7 +8,9 @@ class Prompt extends Component {
         this.props.close(this.inputRef.input.value);
     }
     render() {
+        const { modalProps } = this.props;
         return <Modal
+            {...modalProps}
             visible={this.props.visible}
             onOk={this.onOk}
             onCancel={() => this.props.close()}
