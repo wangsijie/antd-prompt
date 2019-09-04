@@ -1,14 +1,36 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Modal, Input } from 'antd';
+import { Modal, Input, Form } from 'antd';
+
+class PromptForm extends Component {
+    render() {
+        const { form, rules, placeholder } = this.props;
+        const { getFieldDecorator } = form;
+        return (
+            <Form>
+                <Form.Item>
+                    {getFieldDecorator('input', {
+                        rules
+                    })(<Input placeholder={placeholder} />)}
+                </Form.Item>
+            </Form>
+        );
+    }
+}
+
+const EnhancedPromptForm = Form.create()(PromptForm);
 
 class Prompt extends Component {
     state = { visible: false }
     onOk = () => {
-        this.props.close(this.inputRef.input.value);
+        this.formRef.props.form.validateFields(async (err, values) => {
+            if (!err) {
+                this.props.close(values.input);
+            }
+        });
     }
     render() {
-        const { modalProps } = this.props;
+        const { modalProps, rules, placeholder } = this.props;
         return <Modal
             {...modalProps}
             visible={this.props.visible}
@@ -18,7 +40,11 @@ class Prompt extends Component {
             getContainer={false}
             afterClose={this.props.afterClose}
         >
-            <Input ref={ref => this.inputRef = ref} placeholder={this.props.placeholder} />
+            <EnhancedPromptForm
+                wrappedComponentRef={ref => this.formRef = ref}
+                rules={rules}
+                placeholder={placeholder}
+            />
         </Modal>
     }
 }
