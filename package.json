@@ -1,6 +1,6 @@
 {
   "name": "antd-prompt",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "An ant.design helper that auto create a Modal with an optional message prompting the user to input some text.",
   "main": "lib/index.js",
   "module": "esm/index.js",

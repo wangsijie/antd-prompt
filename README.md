@@ -22,10 +22,19 @@ class App extends Component {
     handler = async () => {
         try {
             const name = await prompt({
-                title: 'Please enter name',
-                placeholder: 'Your name',
+                title: "Please enter name",
+                placeholder: "Your name",
+                rules: [
+                    // check this link for more help: https://ant.design/components/form/#Validation-Rules
+                    {
+                        required: true,
+                        message: "You must enter name"
+                    }
+                ],
+                modalProps: {
+                    width: '80%'
+                }
             });
-            message.success('Your name is ' + name);
         } catch (e) {
             message.error('Please enter name');
         }
