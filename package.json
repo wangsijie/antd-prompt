@@ -1,14 +1,19 @@
 {
   "name": "antd-prompt",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "An ant.design helper that auto create a Modal with an optional message prompting the user to input some text.",
-  "main": "lib/index.js",
-  "module": "esm/index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.m.js",
+  "esmodule": "dist/index.modern.js",
+  "source": "src/index.tsx",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "rm -rf esm && rm -rf lib && npm run build:esm && npm run build:commonjs",
-    "build:commonjs": "cross-env BABEL_OUTPUT=commonjs babel src --out-dir lib/ --ignore **/__tests__,**/__mocks__",
-    "build:esm": "babel src --out-dir esm/ --ignore **/__tests__,**/__mocks__",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "microbundle-crl --no-compress --css-modules false --format modern,es,cjs",
+    "start": "microbundle-crl watch --no-compress --css-modules false --format modern,es,cjs",
+    "prepare": "run-s build"
   },
   "repository": {
     "type": "git",
@@ -21,17 +26,34 @@
     "modal"
   ],
   "author": "Wang Sijie (i@sijie.wang)",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/wangsijie/antd-prompt/issues"
   },
   "homepage": "https://github.com/wangsijie/antd-prompt#readme",
+  "peerDependencies": {
+    "antd": "4.x",
+    "react": "> 16"
+  },
   "devDependencies": {
-    "@babel/cli": "^7.5.5",
-    "@babel/core": "^7.5.5",
-    "@babel/plugin-proposal-class-properties": "^7.5.5",
-    "@babel/preset-env": "^7.5.5",
-    "@babel/preset-react": "^7.0.0",
-    "cross-env": "^5.2.0"
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "antd": "^4.8.4",
+    "cross-env": "^7.0.2",
+    "eslint": "^7.13.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "husky": "^4.3.0",
+    "less": "^3.12.2",
+    "lint-staged": "^10.5.1",
+    "microbundle-crl": "^0.13.11",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.1.2",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-scripts": "^4.0.1",
+    "stylelint": "^13.8.0",
+    "stylelint-config-prettier": "^8.0.2",
+    "stylelint-prettier": "^1.1.2"
   }
 }
