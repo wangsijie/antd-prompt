@@ -53,7 +53,6 @@ ReactDOM.render(<App />, document.getElementById('root'));
 
 ## Keep modal open after submit
 
-[![Edit antd-prompt](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/antd-prompt-fohcs?fontsize=14)
 
 ```js
 import React, { component } from 'react';
