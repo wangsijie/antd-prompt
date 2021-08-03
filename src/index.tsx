@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle, useRef } from 'react';
+import React, { forwardRef, useImperativeHandle, useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { Modal, Input, Form } from 'antd';
 import { Rule } from 'antd/es/form';
@@ -8,18 +8,21 @@ interface Props {
   rules?: Rule[];
   placeholder?: string;
   ref?: any;
+  value?: string;
   onPressEnter?: () => void;
 }
 
 const PromptForm = forwardRef(
-  ({ rules, placeholder, onPressEnter }: Props, ref: any) => {
+  ({ rules, placeholder, onPressEnter, value }: Props, ref: any) => {
     const [formInstance] = Form.useForm();
+
+    useEffect(() => {
+      formInstance.setFieldsValue({ input: value });
+    }, []);
 
     useImperativeHandle(ref, () => ({
       validate: () => {
-        return formInstance.validateFields().then((res) => {
-          return Promise.resolve(res.input);
-        });
+        return formInstance.validateFields().then((res) => res.input);
       },
     }));
 
@@ -35,6 +38,7 @@ const PromptForm = forwardRef(
 
 interface PromptConfig {
   title: string;
+  value?: string;
   rules?: Rule[];
   placeholder?: string;
   modalProps?: Partial<ModalProps>;
@@ -58,6 +62,7 @@ function Prompt({
   submit,
   close,
   title,
+  value,
   afterClose,
 }: PromptProps) {
   const formRef = useRef<any>(null);
@@ -82,6 +87,7 @@ function Prompt({
       <PromptForm
         ref={formRef}
         rules={rules}
+        value={value}
         placeholder={placeholder}
         onPressEnter={handleOk}
       />
