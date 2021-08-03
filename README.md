@@ -71,6 +71,7 @@ class App extends Component {
             onOk: name => {
                 // do something with name
                 return false;
+                // or return Promise.resolve(false);
             }
         });
     }
