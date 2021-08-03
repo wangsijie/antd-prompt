@@ -13,18 +13,18 @@ interface Props {
 
 const PromptForm = forwardRef(
   ({ rules, placeholder, onPressEnter }: Props, ref: any) => {
-    const value = useRef();
+    const [formInstance] = Form.useForm();
 
     useImperativeHandle(ref, () => ({
-      getValue: () => value.current,
+      validate: () => {
+        return formInstance.validateFields().then((res) => {
+          return Promise.resolve(res.input);
+        });
+      },
     }));
 
     return (
-      <Form
-        onValuesChange={(_: any, values: any) => {
-          value.current = values.input;
-        }}
-      >
+      <Form form={formInstance}>
         <Form.Item name="input" rules={rules}>
           <Input placeholder={placeholder} onPressEnter={onPressEnter} />
         </Form.Item>
@@ -60,7 +60,7 @@ function Prompt({
   const formRef = useRef<any>(null);
   const handleOk = async () => {
     try {
-      const value = await formRef.current?.getValue();
+      const value = await formRef.current?.validate();
       close(value);
     } catch (e) {
       // noop
