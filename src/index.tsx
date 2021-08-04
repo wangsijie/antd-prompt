@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle, useRef } from 'react';
+import React, { forwardRef, useImperativeHandle, useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { Modal, Input, Form } from 'antd';
 import { Rule } from 'antd/es/form';
@@ -8,18 +8,21 @@ interface Props {
   rules?: Rule[];
   placeholder?: string;
   ref?: any;
+  value?: string;
   onPressEnter?: () => void;
 }
 
 const PromptForm = forwardRef(
-  ({ rules, placeholder, onPressEnter }: Props, ref: any) => {
+  ({ rules, placeholder, onPressEnter, value }: Props, ref: any) => {
     const [formInstance] = Form.useForm();
+
+    useEffect(() => {
+      formInstance.setFieldsValue({ input: value });
+    }, []);
 
     useImperativeHandle(ref, () => ({
       validate: () => {
-        return formInstance.validateFields().then((res) => {
-          return Promise.resolve(res.input);
-        });
+        return formInstance.validateFields().then((res) => res.input);
       },
     }));
 
@@ -35,14 +38,17 @@ const PromptForm = forwardRef(
 
 interface PromptConfig {
   title: string;
+  value?: string;
   rules?: Rule[];
   placeholder?: string;
   modalProps?: Partial<ModalProps>;
+  onOk?: (value?: string) => boolean | Promise<boolean>;
 }
 
 interface PromptProps extends Props {
   modalProps?: Partial<ModalProps>;
   visible: boolean;
+  submit: (value?: string) => void;
   close: (value?: string) => void;
   title: string;
   afterClose?: () => void;
@@ -53,15 +59,17 @@ function Prompt({
   placeholder,
   modalProps = {},
   visible,
+  submit,
   close,
   title,
+  value,
   afterClose,
 }: PromptProps) {
   const formRef = useRef<any>(null);
   const handleOk = async () => {
     try {
       const value = await formRef.current?.validate();
-      close(value);
+      submit(value);
     } catch (e) {
       // noop
     }
@@ -79,6 +87,7 @@ function Prompt({
       <PromptForm
         ref={formRef}
         rules={rules}
+        value={value}
         placeholder={placeholder}
         onPressEnter={handleOk}
       />
@@ -86,12 +95,20 @@ function Prompt({
   );
 }
 
-export default function prompt(config: PromptConfig) {
+export default function prompt(
+  config: PromptConfig
+): Promise<string | undefined> {
   return new Promise((resolve, reject) => {
     const div = document.createElement('div');
     document.body.appendChild(div);
+    const { onOk, ...others } = config;
     // eslint-disable-next-line no-use-before-define
-    let currentConfig: PromptProps = { ...config, close, visible: true };
+    let currentConfig: PromptProps = {
+      ...others,
+      submit,
+      close,
+      visible: true,
+    };
 
     const destroy = (value?: string) => {
       const unmountResult = ReactDOM.unmountComponentAtNode(div);
@@ -105,10 +122,6 @@ export default function prompt(config: PromptConfig) {
       }
     };
 
-    function render(props: PromptProps) {
-      ReactDOM.render(<Prompt {...props} />, div);
-    }
-
     function close(value?: string) {
       currentConfig = {
         ...currentConfig,
@@ -116,6 +129,20 @@ export default function prompt(config: PromptConfig) {
         afterClose: () => destroy(value),
       };
       render(currentConfig);
+    }
+    async function submit(value?: string) {
+      if (onOk) {
+        const isClose = await onOk(value);
+        if (isClose || isClose === undefined) {
+          close(value);
+        }
+      } else {
+        close(value);
+      }
+    }
+
+    function render(props: PromptProps) {
+      ReactDOM.render(<Prompt {...props} />, div);
     }
 
     render(currentConfig);

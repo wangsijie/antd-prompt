@@ -50,3 +50,38 @@ class App extends Component {
 
 ReactDOM.render(<App />, document.getElementById('root'));
 ```
+
+## Keep modal open after submit
+
+
+```js
+import React, { component } from 'react';
+import ReactDOM from 'react-dom';
+import prompt from 'antd-prompt';
+import { Button, message } from 'antd';
+
+class App extends Component {
+    handler = async () => {
+        await prompt({
+            title: "Please enter name",
+            value: 'Initial Value',
+            modalProps: {
+                width: '80%'
+            },
+            onOk: name => {
+                // do something with name
+                return false;
+                // or return Promise.resolve(false);
+            }
+        });
+    }
+    render() {
+        return <div>
+            <Button onClick={this.handler}>Set Name</Button>
+        </div>
+    }
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));
+```
+
