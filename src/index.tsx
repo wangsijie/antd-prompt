@@ -1,4 +1,9 @@
-import React, { forwardRef, useImperativeHandle, useRef, useEffect } from 'react';
+import React, {
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+  useEffect,
+} from 'react';
 import ReactDOM from 'react-dom';
 import { Modal, Input, Form } from 'antd';
 import { Rule } from 'antd/es/form';
@@ -10,10 +15,11 @@ interface Props {
   ref?: any;
   value?: string;
   onPressEnter?: () => void;
+  autoFocus?: boolean;
 }
 
 const PromptForm = forwardRef(
-  ({ rules, placeholder, onPressEnter, value }: Props, ref: any) => {
+  ({ rules, placeholder, onPressEnter, value, autoFocus }: Props, ref: any) => {
     const [formInstance] = Form.useForm();
 
     useEffect(() => {
@@ -29,7 +35,11 @@ const PromptForm = forwardRef(
     return (
       <Form form={formInstance}>
         <Form.Item name="input" rules={rules}>
-          <Input placeholder={placeholder} onPressEnter={onPressEnter} />
+          <Input
+            placeholder={placeholder}
+            onPressEnter={onPressEnter}
+            autoFocus={autoFocus}
+          />
         </Form.Item>
       </Form>
     );
@@ -64,6 +74,7 @@ function Prompt({
   title,
   value,
   afterClose,
+  autoFocus,
 }: PromptProps) {
   const formRef = useRef<any>(null);
   const handleOk = async () => {
@@ -90,6 +101,7 @@ function Prompt({
         value={value}
         placeholder={placeholder}
         onPressEnter={handleOk}
+        autoFocus={autoFocus}
       />
     </Modal>
   );

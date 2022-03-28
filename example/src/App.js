@@ -8,6 +8,7 @@ function App() {
     try {
       const name = await prompt({
         title: 'Please enter name',
+        autoFocus: true,
         placeholder: 'Your name',
         rules: [
           // check this link for more help: https://ant.design/components/form/#Validation-Rules
