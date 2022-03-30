@@ -53,6 +53,7 @@ interface PromptConfig {
   placeholder?: string;
   modalProps?: Partial<ModalProps>;
   onOk?: (value?: string) => boolean | Promise<boolean>;
+  autoFocus?: boolean;
 }
 
 interface PromptProps extends Props {
